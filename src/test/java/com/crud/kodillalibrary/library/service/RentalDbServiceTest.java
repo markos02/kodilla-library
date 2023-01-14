@@ -146,4 +146,39 @@ class RentalDbServiceTest {
         titleDbService.deleteTitle(titleId);
         readerDbService.deleteReader(readerId);
     }
+
+    @Test
+    void testReturnBook() throws RentalNotFoundException, TitleNotFoundException, ReaderNotFoundException, BookCopyNotFoundException, BookNotAvailableException {
+        //Given
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(2023, 0, 14);
+        Date dateFrom = calendar.getTime();
+        calendar.set(2023, 2, 14);
+        Date dateTo = calendar.getTime();
+
+        Title title = new Title("Harry Potter i Kamień Filozoficzny", "J.K. Rowling", 1997);
+        BookCopy bookCopy = new BookCopy(Status.AVAILABLE);
+        bookCopy.setTitle(title);
+        title.getBookCopies().add(bookCopy);
+        Reader reader = new Reader("John", "Smith", new Date(2023, Calendar.JANUARY, 12));
+        RentABook rentABook = new RentABook(title, reader, dateFrom, dateTo);
+
+        //When
+        titleDbService.saveTitle(title);
+        int titleId = title.getId();
+        readerDbService.saveReader(reader);
+        int readerId = reader.getId();
+        Rental retrievedRental = rentalDbService.rentABook(rentABook);
+        int rentalId = retrievedRental.getId();
+
+        rentalDbService.returnBook(rentalId);
+
+        //Then
+        assertThrows(RentalNotFoundException.class, () -> rentalDbService.getRental(rentalId));
+        assertEquals(1, titleDbService.numberAvailableCopies(titleId));
+
+        //CleanUp
+        titleDbService.deleteTitle(titleId);
+        readerDbService.deleteReader(readerId);
+    }
 }

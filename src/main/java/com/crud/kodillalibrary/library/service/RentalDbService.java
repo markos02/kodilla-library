@@ -55,4 +55,14 @@ public class RentalDbService {
             throw new RentalNotFoundException();
         }
     }
+
+    public void returnBook(int rentalId) throws RentalNotFoundException, BookCopyNotFoundException {
+        if (repository.existsById(rentalId)) {
+            int bookCopyId = repository.findById(rentalId).get().getBookCopy().getId();
+            bookCopyDbService.changeStatus(bookCopyId, Status.AVAILABLE);
+            repository.deleteById(rentalId);
+        } else {
+            throw new RentalNotFoundException();
+        }
+    }
 }
