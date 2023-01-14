@@ -25,14 +25,14 @@ public class RentalController {
     private final TitleDbService titleDbService;
 
     @GetMapping
-    public ResponseEntity<List<RentalDto>> getRentals() {
+    public ResponseEntity<List<RentalGetDto>> getRentals() {
         List<Rental> rentals = rentalDbService.getAllRentals();
-        return ResponseEntity.ok(rentalMapper.mapToRentalDtoList(rentals));
+        return ResponseEntity.ok(rentalMapper.mapToRentalGetDtoList(rentals));
     }
 
     @GetMapping(value = "{rentalId}")
-    public ResponseEntity<RentalDto> getRental(@PathVariable Integer rentalId) throws RentalNotFoundException {
-        return ResponseEntity.ok(rentalMapper.mapToRentalDto(rentalDbService.getRental(rentalId)));
+    public ResponseEntity<RentalGetDto> getRental(@PathVariable Integer rentalId) throws RentalNotFoundException {
+        return ResponseEntity.ok(rentalMapper.mapToRentalGetDto(rentalDbService.getRental(rentalId)));
     }
 
     @PostMapping
@@ -41,6 +41,12 @@ public class RentalController {
         Title title = titleDbService.getTitle(rentABookDto.getTitleId());
         RentABook rentABook = new RentABook(title, reader, rentABookDto.getDateFrom(), rentABookDto.getDateTo());
         rentalDbService.rentABook(rentABook);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping(value = "{rentalId}")
+    public ResponseEntity<Void> returnBook(@PathVariable Integer rentalId) throws BookCopyNotFoundException, RentalNotFoundException {
+        rentalDbService.returnBook(rentalId);
         return ResponseEntity.ok().build();
     }
 

@@ -3,6 +3,7 @@ package com.crud.kodillalibrary.library.controller;
 import com.crud.kodillalibrary.library.domain.GetTitleDto;
 import com.crud.kodillalibrary.library.domain.Title;
 import com.crud.kodillalibrary.library.domain.TitleDto;
+import com.crud.kodillalibrary.library.domain.TitleNumberAvailableCopiesDto;
 import com.crud.kodillalibrary.library.mapper.TitleMapper;
 import com.crud.kodillalibrary.library.service.TitleDbService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,14 @@ public class TitleController {
     @GetMapping(value = "{titleId}")
     public ResponseEntity<GetTitleDto> getTitle(@PathVariable Integer titleId) throws TitleNotFoundException {
         return ResponseEntity.ok(titleMapper.mapToGetTitleDto(titleDbService.getTitle(titleId)));
+    }
+
+    @GetMapping("available_copies/{titleId}")
+    public ResponseEntity<TitleNumberAvailableCopiesDto> getNumberAvailableCopies(@PathVariable Integer titleId) throws TitleNotFoundException {
+        return ResponseEntity.ok(new TitleNumberAvailableCopiesDto(
+                titleId,
+                titleDbService.numberAvailableCopies(titleId)
+        ));
     }
 
     @PostMapping

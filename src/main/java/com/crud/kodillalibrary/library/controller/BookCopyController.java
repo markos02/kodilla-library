@@ -45,9 +45,10 @@ public class BookCopyController {
     }
 
     @PutMapping
-    public ResponseEntity<BookCopyDto> changeStatus(@RequestBody BookCopyDto bookCopyDto) {
-        BookCopy bookCopy = bookCopyMapper.mapToBookCopy(bookCopyDto);
-        BookCopy savedBookCopy = bookCopyDbService.saveBookCopy(bookCopy);
+    public ResponseEntity<BookCopyDto> changeStatus(@RequestBody BookCopyChangeStatusDto bookCopyChangeStatusDto) throws BookCopyNotFoundException {
+        BookCopy savedBookCopy = bookCopyDbService.changeStatus(
+                bookCopyChangeStatusDto.getId(),
+                bookCopyChangeStatusDto.getStatus());
         return ResponseEntity.ok(bookCopyMapper.mapToBookCopyDto(savedBookCopy));
     }
 }

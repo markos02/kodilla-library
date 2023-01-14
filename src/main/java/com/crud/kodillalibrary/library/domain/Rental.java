@@ -39,14 +39,4 @@ public class Rental {
         this.dateTo = dateTo;
     }
 
-    @Override
-    public String toString() {
-        return "Rental{" +
-                "id=" + id +
-                ", bookCopy=" + bookCopy.getId() +
-                ", reader=" + reader.getId() +
-                ", dateFrom=" + dateFrom +
-                ", dateTo=" + dateTo +
-                '}';
-    }
 }

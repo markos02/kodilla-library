@@ -1,9 +1,6 @@
 package com.crud.kodillalibrary.library.mapper;
 
-import com.crud.kodillalibrary.library.domain.BookCopy;
-import com.crud.kodillalibrary.library.domain.GetTitleDto;
-import com.crud.kodillalibrary.library.domain.Title;
-import com.crud.kodillalibrary.library.domain.TitleDto;
+import com.crud.kodillalibrary.library.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
